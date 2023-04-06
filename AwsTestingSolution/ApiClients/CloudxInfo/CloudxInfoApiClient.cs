@@ -1,7 +1,6 @@
 ﻿using AwsTestingSolution.ApiClients.CloudxInfo.Models;
 using Newtonsoft.Json;
 using System.Net;
-using System.Text.Json;
 
 namespace AwsTestingSolution.ApiClients.CloudxInfo
 {

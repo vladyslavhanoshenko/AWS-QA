@@ -29,5 +29,7 @@ namespace AwsTestingSolution.Storages
         public static string PublicInstanceSecurityGroupId = "sg-03d9f3763cb3a2f44";
 
         public static string PrivateInstanceSecurityGroupId = "sg-006ae86d26d2b7de6";
+
+        public static string EC2UserName = "ec2-user";
     }
 }
