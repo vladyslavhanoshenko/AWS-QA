@@ -1,13 +1,9 @@
-﻿using Amazon;
-using Amazon.EC2;
-using Amazon.EC2.Model;
-using Amazon.Runtime.CredentialManagement;
-using Amazon.Runtime;
+﻿using Amazon.EC2.Model;
 using NUnit.Framework;
-using AwsTestingSolution.Configs;
 using AwsTestingSolution.Mappers;
 using FluentAssertions;
 using AwsTestingSolution.Storages;
+using AwsTestingSolution.ApiClients;
 
 namespace AwsTestingSolution.EC2
 {
@@ -15,39 +11,19 @@ namespace AwsTestingSolution.EC2
     public class EC2Scenarios
     {
         [Test]
-        public void GetListOfInstances()
+        public void DeploymentValidation()
         {
-            var chain = new CredentialProfileStoreChain();
-            AWSCredentials awsCredentials;
-            bool IsCredentialsReceived = chain.TryGetAWSCredentials(AwsConfig.ProfileName, out awsCredentials);
-            if (!IsCredentialsReceived) throw new Exception("Credentials are not correct. Please check profile or credentials in AWS CLI");
+            EC2ApiClientWrapper eC2ApiClientWrapper = new EC2ApiClientWrapper();
+            IEnumerable<Instance> actualInstancesDeployed = eC2ApiClientWrapper.GetAllDeployedInstances();
 
-            var client = new AmazonEC2Client(awsCredentials, AwsConfig.Config);
-            var request = new DescribeInstancesRequest();
-            var response = client.DescribeInstancesAsync(request);
-            IEnumerable<Instance> actualInstancesDeployed = response.Result.Reservations.SelectMany(reservation => reservation.Instances);
             var actualMappedInstancesDeployed = actualInstancesDeployed.Select(instance => EC2Mapper.MapInstanceToEC2InstanceModel(instance)).ToList();
-            actualMappedInstancesDeployed.ForEach(i => i.RootBlockDeviceSize = "8");
-
-            foreach (Instance instance in actualInstancesDeployed)
-            {
-                var describeVolumesRequest = new DescribeVolumesRequest
-                {
-                    Filters = new List<Filter>
-                    {
-                        new Filter("attachment.instance-id", new List<string>{ instance.InstanceId }),
-                        new Filter("attachment.device", new List<string>{ instance.RootDeviceName }) 
-                    }
-                };
-
-                var describeVolumesResponse = client.DescribeVolumesAsync(describeVolumesRequest);
-
-                var rootVolume = describeVolumesResponse.Result.Volumes.FirstOrDefault();
-            }
-
-
+            actualMappedInstancesDeployed.ForEach(instance => instance.RootBlockDeviceSize = eC2ApiClientWrapper.GetRootDeviceVolume(instance.InstanceId));
             actualMappedInstancesDeployed.Should().BeEquivalentTo(EC2DataStorage.ExpectedDeployedInstances);
+        }
 
+        [Test]
+        public void ApplicationFunctionalValidation()
+        {
 
         }
     }
