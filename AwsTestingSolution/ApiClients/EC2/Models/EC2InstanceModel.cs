@@ -1,4 +1,4 @@
-﻿namespace AwsTestingSolution.Models
+﻿namespace AwsTestingSolution.ApiClients.EC2.Models
 {
     public class EC2InstanceModel
     {

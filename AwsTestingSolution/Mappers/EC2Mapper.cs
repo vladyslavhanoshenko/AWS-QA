@@ -1,5 +1,5 @@
 ﻿using Amazon.EC2.Model;
-using AwsTestingSolution.Models;
+using AwsTestingSolution.ApiClients.EC2.Models;
 
 namespace AwsTestingSolution.Mappers
 {

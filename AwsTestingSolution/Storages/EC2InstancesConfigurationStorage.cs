@@ -1,8 +1,8 @@
-﻿using AwsTestingSolution.Models;
+﻿using AwsTestingSolution.ApiClients.EC2.Models;
 
 namespace AwsTestingSolution.Storages
 {
-    public class EC2DataStorage
+    public class EC2InstancesConfigurationStorage
     {
         public static EC2InstanceModel[] ExpectedDeployedInstances => new EC2InstanceModel[] { PublicInstanceExpectedData, PrivateInstanceExpectedData };
 

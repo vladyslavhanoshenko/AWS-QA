@@ -4,7 +4,7 @@ using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
 using AwsTestingSolution.Configs;
 
-namespace AwsTestingSolution.ApiClients
+namespace AwsTestingSolution.ApiClients.EC2
 {
     public class EC2ApiClientWrapper
     {
