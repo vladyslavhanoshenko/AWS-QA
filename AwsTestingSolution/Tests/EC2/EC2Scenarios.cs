@@ -10,7 +10,7 @@ using Renci.SshNet;
 using Newtonsoft.Json;
 using AwsTestingSolution.Configs;
 
-namespace AwsTestingSolution.EC2
+namespace AwsTestingSolution.Tests.EC2
 {
     [TestFixture]
     public class EC2Scenarios
