@@ -4,7 +4,7 @@ using Amazon.EC2.Model;
 using Amazon.Runtime.CredentialManagement;
 using Amazon.Runtime;
 using NUnit.Framework;
-
+using AwsTestingSolution.Configs;
 
 namespace AwsTestingSolution.EC2
 {
@@ -14,17 +14,10 @@ namespace AwsTestingSolution.EC2
         [Test]
         public void GetListOfInstances()
         {
-            var profileName = "default";
-
-            var config = new AmazonEC2Config
-            {
-                RegionEndpoint = RegionEndpoint.USEast1 // Replace with your desired region
-            };
-
             var chain = new CredentialProfileStoreChain();
-            if (chain.TryGetAWSCredentials(profileName, out AWSCredentials awsCredentials))
+            if (chain.TryGetAWSCredentials(AwsConfig.ProfileName, out AWSCredentials awsCredentials))
             {
-                using (var client = new AmazonEC2Client(awsCredentials, config))
+                using (var client = new AmazonEC2Client(awsCredentials, AwsConfig.Config))
                 {
                     var request = new DescribeInstancesRequest();
 
@@ -38,7 +31,6 @@ namespace AwsTestingSolution.EC2
                             Console.WriteLine($"Instance Type: {instance.InstanceType}");
                             Console.WriteLine($"Launch Time: {instance.LaunchTime}");
                             Console.WriteLine($"State: {instance.State.Name}");
-                            // Add more properties as needed
                         }
                     }
                 }
