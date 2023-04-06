@@ -24,6 +24,25 @@ namespace AwsTestingSolution.EC2
         }
 
         [Test]
+        public void VerifyPublicInstanceSecurityGroups()
+        {
+            EC2ApiClientWrapper eC2ApiClientWrapper = new EC2ApiClientWrapper();
+            var actualSecurityGroupInfoResponse = eC2ApiClientWrapper.GetSecurityGroupInfo(EC2InstancesConfigurationStorage.PublicInstanceSecurityGroupId);
+
+            var securityGroupInfo = actualSecurityGroupInfoResponse.SecurityGroups.Single();
+            var outIpPermissions = securityGroupInfo.IpPermissionsEgress.Single();
+            outIpPermissions.Ipv4Ranges.Should().OnlyContain(permission => permission.CidrIp.Equals("0.0.0.0/0") && permission.Description.Equals("Allow all outbound traffic by default"));
+
+            var inIpPermissions = securityGroupInfo.IpPermissions;
+
+            var port80Permission = inIpPermissions.Single(permission => permission.FromPort.Equals(80));
+            port80Permission.Ipv4Ranges.Should().OnlyContain(range => range.CidrIp.Equals("0.0.0.0/0") && range.Description.Equals("HTTP from Internet"));
+
+            var port22Permission = inIpPermissions.Single(permission => permission.FromPort.Equals(22));
+            port22Permission.Ipv4Ranges.Should().OnlyContain(range => range.CidrIp.Equals("0.0.0.0/0") && range.Description.Equals("SSH from Internet"));
+        }
+
+        [Test]
         public void ApplicationFunctionalValidation()
         {
             CloudxInfoApiClient CloudxInfoApiClient = new CloudxInfoApiClient();

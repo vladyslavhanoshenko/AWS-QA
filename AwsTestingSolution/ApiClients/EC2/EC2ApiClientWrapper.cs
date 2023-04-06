@@ -3,6 +3,7 @@ using Amazon.EC2.Model;
 using Amazon.Runtime;
 using Amazon.Runtime.CredentialManagement;
 using AwsTestingSolution.Configs;
+using System.Net.Sockets;
 
 namespace AwsTestingSolution.ApiClients.EC2
 {
@@ -25,6 +26,16 @@ namespace AwsTestingSolution.ApiClients.EC2
             var response = EC2Client.DescribeInstancesAsync(request);
             IEnumerable<Instance> actualInstancesDeployed = response.Result.Reservations.SelectMany(reservation => reservation.Instances);
             return actualInstancesDeployed;
+        }
+
+        public DescribeSecurityGroupsResponse GetSecurityGroupInfo(string securityGroupId)
+        {
+            var request = new DescribeSecurityGroupsRequest
+            {
+                GroupIds = new List<string> { securityGroupId }
+            };
+            var response = EC2Client.DescribeSecurityGroupsAsync(request);
+            return response.Result;
         }
 
         public int GetRootDeviceVolume(string instanceId, string deviceName = "/dev/xvda")

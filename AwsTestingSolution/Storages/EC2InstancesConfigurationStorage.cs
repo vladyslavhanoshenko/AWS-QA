@@ -25,5 +25,9 @@ namespace AwsTestingSolution.Storages
             RootBlockDeviceSize = 8,
             InstanceOs = "Linux/UNIX",
         };
+
+        public static string PublicInstanceSecurityGroupId = "sg-03d9f3763cb3a2f44";
+
+        public static string PrivateInstanceSecurityGroupId = "sg-006ae86d26d2b7de6";
     }
 }
