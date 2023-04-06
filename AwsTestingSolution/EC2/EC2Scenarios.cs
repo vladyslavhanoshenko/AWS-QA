@@ -43,7 +43,30 @@ namespace AwsTestingSolution.EC2
         }
 
         [Test]
-        public void ApplicationFunctionalValidation()
+        public void VerifyPrivateInstanceSecurityGroups()
+        {
+            EC2ApiClientWrapper eC2ApiClientWrapper = new EC2ApiClientWrapper();
+            var actualSecurityGroupInfoResponse = eC2ApiClientWrapper.GetSecurityGroupInfo(EC2InstancesConfigurationStorage.PrivateInstanceSecurityGroupId);
+
+            var securityGroupInfo = actualSecurityGroupInfoResponse.SecurityGroups.Single();
+            var outIpPermissions = securityGroupInfo.IpPermissionsEgress.Single();
+            outIpPermissions.Ipv4Ranges.Should().OnlyContain(permission => permission.CidrIp.Equals("0.0.0.0/0") && permission.Description.Equals("Allow all outbound traffic by default"));
+
+            var inIpPermissions = securityGroupInfo.IpPermissions;
+
+            var port80Permission = inIpPermissions.Single(permission => permission.FromPort.Equals(80));
+            port80Permission.Ipv4Ranges.Should().BeNullOrEmpty();
+            port80Permission.Ipv6Ranges.Should().BeNullOrEmpty();
+            port80Permission.UserIdGroupPairs.Should().OnlyContain(usidgroup => usidgroup.GroupId.Equals(EC2InstancesConfigurationStorage.PublicInstanceSecurityGroupId) && usidgroup.Description.Equals("HTTP from Internet"));
+
+            var port22Permission = inIpPermissions.Single(permission => permission.FromPort.Equals(22));
+            port22Permission.Ipv4Ranges.Should().BeNullOrEmpty();
+            port22Permission.Ipv6Ranges.Should().BeNullOrEmpty();
+            port22Permission.UserIdGroupPairs.Should().OnlyContain(usidgroup => usidgroup.GroupId.Equals(EC2InstancesConfigurationStorage.PublicInstanceSecurityGroupId) && usidgroup.Description.Equals("SSH from Internet"));
+        }
+
+        [Test]
+        public void PublicApplicationFunctionalValidation()
         {
             CloudxInfoApiClient CloudxInfoApiClient = new CloudxInfoApiClient();
             InstanceMetadataModel actualInstanceMetaData = CloudxInfoApiClient.GetIntanceMetaData("http://" + EC2InstancesConfigurationStorage.PublicInstanceExpectedData.PublicDns + "/");
