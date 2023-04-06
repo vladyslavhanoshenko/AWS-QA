@@ -10,5 +10,12 @@ namespace AwsTestingSolution.Storages
             PrivateIpv4 = "10.0.2.135",
             Region = "us-east-1"
         };
+
+        public static InstanceMetadataModel PrivateInstanceExpectedMetadata = new InstanceMetadataModel
+        {
+            AvailabilityZone = "us-east-1a",
+            PrivateIpv4 = "10.0.191.159",
+            Region = "us-east-1"
+        };
     }
 }

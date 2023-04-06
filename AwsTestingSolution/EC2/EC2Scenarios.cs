@@ -6,6 +6,9 @@ using AwsTestingSolution.Storages;
 using AwsTestingSolution.ApiClients.EC2;
 using AwsTestingSolution.ApiClients.CloudxInfo;
 using AwsTestingSolution.ApiClients.CloudxInfo.Models;
+using Renci.SshNet;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace AwsTestingSolution.EC2
 {
@@ -71,6 +74,24 @@ namespace AwsTestingSolution.EC2
             CloudxInfoApiClient CloudxInfoApiClient = new CloudxInfoApiClient();
             InstanceMetadataModel actualInstanceMetaData = CloudxInfoApiClient.GetIntanceMetaData("http://" + EC2InstancesConfigurationStorage.PublicInstanceExpectedData.PublicDns + "/");
             actualInstanceMetaData.Should().BeEquivalentTo(EC2MetadataStorage.PublicInstanceExpectedMetadata);
+        }
+
+        [Test]
+        public void PrivateApplicationFunctionalValidation()
+        {
+            var privateKeyFile = new PrivateKeyFile("F:/AWS/AwsTestingSolution/mykeypare.pem");
+            var privateKeyAuth = new PrivateKeyAuthenticationMethod("ec2-user", privateKeyFile);
+
+            var connectionInfo = new ConnectionInfo("ec2-54-159-168-192.compute-1.amazonaws.com", "ec2-user", privateKeyAuth);
+            var sshClient = new SshClient(connectionInfo);
+            sshClient.Connect();
+
+            var response = sshClient.RunCommand("curl http://ip-10-0-191-159.ec2.internal");
+            var result = response.Result;
+
+            var actualInstanceMetaData = JsonConvert.DeserializeObject<InstanceMetadataModel>(result);
+
+            actualInstanceMetaData.Should().BeEquivalentTo(EC2MetadataStorage.PrivateInstanceExpectedMetadata);
         }
     }
 }
