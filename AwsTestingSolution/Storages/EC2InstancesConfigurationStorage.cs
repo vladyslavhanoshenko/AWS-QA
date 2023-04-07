@@ -30,6 +30,8 @@ namespace AwsTestingSolution.Storages
 
         public static string PrivateInstanceSecurityGroupId = "sg-006ae86d26d2b7de6";
 
+        public static string PrivateInstancePrivateDns = "http://ip-10-0-191-159.ec2.internal";
+
         public static string EC2UserName = "ec2-user";
     }
 }

@@ -83,7 +83,7 @@ namespace AwsTestingSolution.Tests.EC2
             var sshClient = new SshClient(connectionInfo);
             sshClient.Connect();
 
-            SshCommand response = sshClient.RunCommand($"curl {EC2InstancesConfigurationStorage.PublicInstanceExpectedData.PublicDns}");
+            SshCommand response = sshClient.RunCommand($"curl {EC2InstancesConfigurationStorage.PrivateInstancePrivateDns}");
             string curlResult = response.Result;
 
             var actualInstanceMetaData = JsonConvert.DeserializeObject<InstanceMetadataModel>(curlResult);
