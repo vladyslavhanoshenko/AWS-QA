@@ -20,6 +20,34 @@ namespace AwsTestingSolution.ApiClients.EC2
             if (!IsCredentialsReceived) throw new Exception("Credentials are not correct. Please check profile or credentials in AWS CLI");
         }
 
+        public DescribeVpcsResponse DescribeVpcs()
+        {
+            Task<DescribeVpcsResponse> describeVpscResponseTask = EC2Client.DescribeVpcsAsync();
+            return describeVpscResponseTask.Result;
+        }
+
+        public DescribeSubnetsResponse DescribeSubnetsForVpc(params string[] vpcsIds)
+        {
+            Task<DescribeSubnetsResponse> describeSubnetsResponseTask = EC2Client.DescribeSubnetsAsync(new DescribeSubnetsRequest
+            {
+                Filters = new List<Filter>
+                {
+                    new Filter
+                    {
+                        Name = "vpc-id",
+                        Values = vpcsIds.ToList()
+                    }
+                }
+            });
+            return describeSubnetsResponseTask.Result;
+        }
+
+        public Vpc GetVpcByName(string vpcnName)
+        {
+            var vpscResponce = DescribeVpcs();
+            return vpscResponce.Vpcs.Single(vpc => vpc.Tags.Any(tag => tag.Value.Equals(vpcnName)));
+        }
+
         public IEnumerable<Instance> GetAllDeployedInstances()
         {
             var request = new DescribeInstancesRequest();
