@@ -32,6 +32,8 @@ namespace AwsTestingSolution.Storages
 
         public static string PrivateInstancePrivateDns = "http://ip-10-0-148-210.ec2.internal";
 
+        public static string PrivateInstancePrivateIp = "10.0.148.210";
+
         public static string EC2UserName = "ec2-user";
     }
 }
