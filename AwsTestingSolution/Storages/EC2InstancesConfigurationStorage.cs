@@ -13,8 +13,8 @@ namespace AwsTestingSolution.Storages
             InstanceTags = new string[] { "qa", "cloudxinfo/PublicInstance/Instance" },
             RootBlockDeviceSize = 8,
             InstanceOs = "Linux/UNIX",
-            PublicDns = "ec2-54-159-168-192.compute-1.amazonaws.com",
-            PublicIp = "54.159.168.192"
+            PublicDns = "ec2-54-173-17-255.compute-1.amazonaws.com",
+            PublicIp = "54.173.17.255"
         };
 
         public static EC2InstanceModel PrivateInstanceExpectedData = new EC2InstanceModel
@@ -30,7 +30,7 @@ namespace AwsTestingSolution.Storages
 
         public static string PrivateInstanceSecurityGroupId = "sg-006ae86d26d2b7de6";
 
-        public static string PrivateInstancePrivateDns = "http://ip-10-0-191-159.ec2.internal";
+        public static string PrivateInstancePrivateDns = "http://ip-10-0-148-210.ec2.internal";
 
         public static string EC2UserName = "ec2-user";
     }

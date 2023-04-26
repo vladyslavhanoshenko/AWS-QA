@@ -13,24 +13,22 @@ using AwsTestingSolution.Configs;
 namespace AwsTestingSolution.Tests.EC2
 {
     [TestFixture]
-    public class EC2Scenarios
+    public class EC2Scenarios : AwsTestsBase
     {
         [Test]
         public void DeploymentValidation()
         {
-            EC2ApiClientWrapper eC2ApiClientWrapper = new EC2ApiClientWrapper();
-            IEnumerable<Instance> actualInstancesDeployed = eC2ApiClientWrapper.GetAllDeployedInstances();
+            IEnumerable<Instance> actualInstancesDeployed = EC2ApiClientWrapper.GetAllDeployedInstances();
 
             var actualMappedInstancesDeployed = actualInstancesDeployed.Select(instance => EC2Mapper.MapInstanceToEC2InstanceModel(instance)).ToList();
-            actualMappedInstancesDeployed.ForEach(instance => instance.RootBlockDeviceSize = eC2ApiClientWrapper.GetRootDeviceVolume(instance.InstanceId));
+            actualMappedInstancesDeployed.ForEach(instance => instance.RootBlockDeviceSize = EC2ApiClientWrapper.GetRootDeviceVolume(instance.InstanceId));
             actualMappedInstancesDeployed.Should().BeEquivalentTo(EC2InstancesConfigurationStorage.ExpectedDeployedInstances);
         }
 
         [Test]
         public void VerifyPublicInstanceSecurityGroups()
         {
-            EC2ApiClientWrapper eC2ApiClientWrapper = new EC2ApiClientWrapper();
-            var actualSecurityGroupInfoResponse = eC2ApiClientWrapper.GetSecurityGroupInfo(EC2InstancesConfigurationStorage.PublicInstanceSecurityGroupId);
+            var actualSecurityGroupInfoResponse = EC2ApiClientWrapper.GetSecurityGroupInfo(EC2InstancesConfigurationStorage.PublicInstanceSecurityGroupId);
 
             var securityGroupInfo = actualSecurityGroupInfoResponse.SecurityGroups.Single();
             var outIpPermissions = securityGroupInfo.IpPermissionsEgress.Single();
@@ -48,8 +46,7 @@ namespace AwsTestingSolution.Tests.EC2
         [Test]
         public void VerifyPrivateInstanceSecurityGroups()
         {
-            EC2ApiClientWrapper eC2ApiClientWrapper = new EC2ApiClientWrapper();
-            var actualSecurityGroupInfoResponse = eC2ApiClientWrapper.GetSecurityGroupInfo(EC2InstancesConfigurationStorage.PrivateInstanceSecurityGroupId);
+            var actualSecurityGroupInfoResponse = EC2ApiClientWrapper.GetSecurityGroupInfo(EC2InstancesConfigurationStorage.PrivateInstanceSecurityGroupId);
 
             var securityGroupInfo = actualSecurityGroupInfoResponse.SecurityGroups.Single();
             var outIpPermissions = securityGroupInfo.IpPermissionsEgress.Single();
@@ -77,6 +74,7 @@ namespace AwsTestingSolution.Tests.EC2
         }
 
         [Test]
+        [Description("Scenario used for both EC2/VPC homeworks (checking accessibility of private instance from public)")]
         public void PrivateApplicationFunctionalValidation()
         {
             var connectionInfo = new ConnectionInfo(EC2InstancesConfigurationStorage.PublicInstanceExpectedData.PublicDns, EC2InstancesConfigurationStorage.EC2UserName, new PrivateKeyAuthenticationMethod(EC2InstancesConfigurationStorage.EC2UserName, new PrivateKeyFile(CredentialsConfig.PemKeyFilePath)));
