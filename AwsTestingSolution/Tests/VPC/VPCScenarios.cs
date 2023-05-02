@@ -36,7 +36,7 @@ namespace AwsTestingSolution.Tests.VPC
         [Test]
         public void VerifyAccessibilityOfPublicInstanceViaInternetGateway()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + EC2InstancesConfigurationStorage.PublicInstanceExpectedData.PublicDns);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + EC2InstancesDataStorage.PublicInstanceExpectedData.PublicDns);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
@@ -44,16 +44,16 @@ namespace AwsTestingSolution.Tests.VPC
         [Test]
         public void PrivateInstanceShouldHaveAccessToTheInternetViaNatGateway()
         {
-            var connectionInfo = new ConnectionInfo(EC2InstancesConfigurationStorage.PublicInstanceExpectedData.PublicDns, EC2InstancesConfigurationStorage.EC2UserName, new PrivateKeyAuthenticationMethod(EC2InstancesConfigurationStorage.EC2UserName, new PrivateKeyFile(CredentialsConfig.PemKeyFilePath)));
+            var connectionInfo = new ConnectionInfo(EC2InstancesDataStorage.PublicInstanceExpectedData.PublicDns, EC2InstancesDataStorage.EC2UserName, new PrivateKeyAuthenticationMethod(EC2InstancesDataStorage.EC2UserName, new PrivateKeyFile(CredentialsConfig.PemKeyFilePath)));
             var sshClient = new SshClient(connectionInfo);
             sshClient.Connect();
 
           
-            var forwardedPort = new ForwardedPortLocal(SshConfig.LocalIpAddress, SshConfig.LocalPortForPrivateInstance, EC2InstancesConfigurationStorage.PrivateInstancePrivateIp, 22);
+            var forwardedPort = new ForwardedPortLocal(SshConfig.LocalIpAddress, SshConfig.LocalPortForPrivateInstance, EC2InstancesDataStorage.PrivateInstancePrivateIp, 22);
             sshClient.AddForwardedPort(forwardedPort);
             forwardedPort.Start();
 
-            var privateInstance = new ConnectionInfo(SshConfig.LocalIpAddress, (int)SshConfig.LocalPortForPrivateInstance, EC2InstancesConfigurationStorage.EC2UserName, new PrivateKeyAuthenticationMethod(EC2InstancesConfigurationStorage.EC2UserName, new PrivateKeyFile(CredentialsConfig.PemKeyFilePath)));
+            var privateInstance = new ConnectionInfo(SshConfig.LocalIpAddress, (int)SshConfig.LocalPortForPrivateInstance, EC2InstancesDataStorage.EC2UserName, new PrivateKeyAuthenticationMethod(EC2InstancesDataStorage.EC2UserName, new PrivateKeyFile(CredentialsConfig.PemKeyFilePath)));
             var privateSshClient = new SshClient(privateInstance);
             privateSshClient.Connect();
 
@@ -65,7 +65,7 @@ namespace AwsTestingSolution.Tests.VPC
         [Test]
         public void PrivateInstanceShouldNotBeAccessibleFromPublicInternet()
         {
-            string ipAddress = EC2InstancesConfigurationStorage.PrivateInstancePrivateIp;
+            string ipAddress = EC2InstancesDataStorage.PrivateInstancePrivateIp;
             Ping pingSender = new Ping();
             PingOptions options = new PingOptions();
             options.DontFragment = true;

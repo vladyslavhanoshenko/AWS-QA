@@ -2,7 +2,7 @@
 
 namespace AwsTestingSolution.Storages
 {
-    public class EC2InstancesConfigurationStorage
+    public class EC2InstancesDataStorage
     {
         public static EC2InstanceModel[] ExpectedDeployedInstances => new EC2InstanceModel[] { PublicInstanceExpectedData, PrivateInstanceExpectedData };
 
@@ -30,9 +30,9 @@ namespace AwsTestingSolution.Storages
 
         public static string PrivateInstanceSecurityGroupId = "sg-006ae86d26d2b7de6";
 
-        public static string PrivateInstancePrivateDns = "http://ip-10-0-148-210.ec2.internal";
+        public static string PrivateInstancePrivateDns = "http://ip-10-0-104-227.ec2.internal";
 
-        public static string PrivateInstancePrivateIp = "10.0.148.210";
+        public static string PrivateInstancePrivateIp = "10.0.104.227";
 
         public static string EC2UserName = "ec2-user";
     }

@@ -2,6 +2,6 @@
 {
     public class CredentialsConfig
     {
-        public static string PemKeyFilePath = "F:/AWS/AwsTestingSolution/pemforvpc.pem";
+        public static string PemKeyFilePath = "F:/AWS/AwsTestingSolution/pemfors3.pem";
     }
 }

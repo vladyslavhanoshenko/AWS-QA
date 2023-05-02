@@ -14,7 +14,7 @@ namespace AwsTestingSolution.Storages
         public static InstanceMetadataModel PrivateInstanceExpectedMetadata = new InstanceMetadataModel
         {
             AvailabilityZone = "us-east-1a",
-            PrivateIpv4 = "10.0.191.159",
+            PrivateIpv4 = "10.0.104.227",
             Region = "us-east-1"
         };
     }

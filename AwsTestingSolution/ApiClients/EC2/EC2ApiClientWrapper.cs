@@ -1,24 +1,14 @@
-﻿using Amazon.EC2;
+﻿
+using Amazon.EC2;
 using Amazon.EC2.Model;
-using Amazon.Runtime;
-using Amazon.Runtime.CredentialManagement;
 using AwsTestingSolution.Configs;
-using System.Net.Sockets;
 
 namespace AwsTestingSolution.ApiClients.EC2
 {
-    public class EC2ApiClientWrapper
+    public class EC2ApiClientWrapper : ApiClientBase
     {
-        private AWSCredentials awsCredentials;
         public EC2ApiClientWrapper() => GetAwsCredentials();
-        private AmazonEC2Client EC2Client => new AmazonEC2Client(awsCredentials, AwsConfig.Config);
-
-        private void GetAwsCredentials()
-        {
-            var chain = new CredentialProfileStoreChain();
-            bool IsCredentialsReceived = chain.TryGetAWSCredentials(AwsConfig.ProfileName, out awsCredentials);
-            if (!IsCredentialsReceived) throw new Exception("Credentials are not correct. Please check profile or credentials in AWS CLI");
-        }
+        private AmazonEC2Client EC2Client => new AmazonEC2Client(awsCredentials, AwsConfig.EC2Config);
 
         public DescribeVpcsResponse DescribeVpcs()
         {
