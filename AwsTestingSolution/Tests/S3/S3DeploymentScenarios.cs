@@ -13,7 +13,7 @@ namespace AwsTestingSolution.Tests.S3
         [Test]
         public void VerifyCloudxImageApp()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(CloudximageDataStorage.AppInstancePublicDns);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(CloudximageDataStorage.AppInstancePublicDns + "/api/ui");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }

@@ -5,7 +5,7 @@ using AwsTestingSolution.Configs;
 
 namespace AwsTestingSolution.ApiClients.S3
 {
-    public class S3ApiClientWrapper : ApiClientBase
+    public class S3ApiClientWrapper : AwsApiClientBase
     {
         public S3ApiClientWrapper() => GetAwsCredentials();
         private AmazonS3Client S3Client => new AmazonS3Client(awsCredentials, AwsConfig.S3Config);

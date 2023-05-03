@@ -5,7 +5,7 @@ using AwsTestingSolution.Configs;
 
 namespace AwsTestingSolution.ApiClients.EC2
 {
-    public class EC2ApiClientWrapper : ApiClientBase
+    public class EC2ApiClientWrapper : AwsApiClientBase
     {
         public EC2ApiClientWrapper() => GetAwsCredentials();
         private AmazonEC2Client EC2Client => new AmazonEC2Client(awsCredentials, AwsConfig.EC2Config);
