@@ -15,6 +15,11 @@ namespace AwsTestingSolution.ApiClients.CloudxImage
             return ExecuteGet<CloudxImageGetModel[]>(CloudximageDataStorage.AppInstancePublicDns + "/api/image");
         }
 
+        public CloudxImageGetModel GetUploadedImageById(int imageId)
+        {
+            return ExecuteGet<CloudxImageGetModel>(CloudximageDataStorage.AppInstancePublicDns + $"/api/image/{imageId}");
+        }
+
         public void DownloadFileFromS3Bucket(int fileId, string downloadPath)
         {
             DownloadFileGet(CloudximageDataStorage.AppInstancePublicDns + $"/api/image/{fileId}", downloadPath);
