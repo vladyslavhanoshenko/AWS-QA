@@ -73,10 +73,10 @@ namespace AwsTestingSolution.ApiClients
             WriteResponseStreamToFile(response, filePath);
         }
 
-        protected void ExecuteDelete(string uri, string requestData = "")
+        protected string ExecuteDelete(string uri, string requestData = "")
         {
             Client.Headers.Add("Content-Type", "application/json");
-            Client.UploadString(uri, "DELETE", requestData);
+            return Client.UploadString(uri, "DELETE", requestData);
         }
 
         private void WriteResponseStreamToFile(HttpWebResponse response, string filePath)
