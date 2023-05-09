@@ -1,5 +1,5 @@
-﻿using AwsTestingSolution.ApiClients.CloudxImage;
-using AwsTestingSolution.ApiClients.CloudxImage.Models;
+﻿using AwsTestingSolution.ApiClients.Image;
+using AwsTestingSolution.ApiClients.Image.Models;
 using AwsTestingSolution.Storages;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,8 +9,8 @@ namespace AwsTestingSolution.Tests.S3
     [TestFixture]
     public class S3FunctionalScenarios : AwsTestsBase
     {
-        private CloudxImageUploadImageModel _uploadedImageModel;
-        private CloudxImageApiClient _cloudxImageApiClient = new CloudxImageApiClient();
+        private ImageModel _uploadedImageModel;
+        private ImageApiClient _cloudxImageApiClient = new ImageApiClient();
         private string _fileName = "UploadImageName" + DateTime.Now.Ticks;
         private string _fileDownloadPath = Directory.GetCurrentDirectory() + "/DowloadedFile" + DateTime.Now.Ticks;
 

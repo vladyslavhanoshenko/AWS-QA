@@ -1,9 +1,6 @@
-﻿using AwsTestingSolution.ApiClients.CloudxImage.Models;
-using AwsTestingSolution.Storages;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mime;
-using System.Text;
 
 namespace AwsTestingSolution.ApiClients
 {
@@ -21,6 +18,20 @@ namespace AwsTestingSolution.ApiClients
             string response = ExecuteGet(uri);
             T entities = DeserializeObject<T>(response);
             return entities;
+        }
+
+        protected T ExecutePost<T>(string uri, string query = "") where T : class
+        {
+            string response = ExecutePost(uri);
+            T entities = DeserializeObject<T>(response);
+            return entities;
+        }
+
+        protected string ExecutePost(string uri, string query = "")
+        {
+            Client.Headers.Add("Content-Type", "application/json");
+            Client.Headers.Add("Accept", "application/json, text/plain, */*");
+            return Client.UploadString(uri, "POST", query);
         }
 
         protected T UploadFile<T>(string uri, string pathToFile, string alternativeName = null) where T : class

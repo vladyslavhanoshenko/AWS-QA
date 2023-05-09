@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace AwsTestingSolution.Tests.SnsSqs
 {
     [TestFixture]
-    public class SnsSqsScenarios : AwsTestsBase
+    public class SnsSqsDeploymentScenarios : AwsTestsBase
     {
         [Test]
         [Category("Deployment")]

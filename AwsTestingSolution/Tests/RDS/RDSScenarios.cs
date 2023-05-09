@@ -1,6 +1,6 @@
 ﻿using Amazon.RDS.Model;
-using AwsTestingSolution.ApiClients.CloudxImage;
-using AwsTestingSolution.ApiClients.CloudxImage.Models;
+using AwsTestingSolution.ApiClients.Image;
+using AwsTestingSolution.ApiClients.Image.Models;
 using AwsTestingSolution.Configs;
 using AwsTestingSolution.Storages;
 using Dapper;
@@ -14,9 +14,9 @@ namespace AwsTestingSolution.Tests.RDS
     [TestFixture]
     public class RDSScenarios : AwsTestsBase
     {
-        private CloudxImageApiClient _cloudxImageApiClient = new CloudxImageApiClient();
+        private ImageApiClient _cloudxImageApiClient = new ImageApiClient();
         private string _fileName = "UploadImageName" + DateTime.Now.Ticks;
-        private CloudxImageUploadImageModel _uploadedImageModel;
+        private ImageModel _uploadedImageModel;
         private MySqlConnection _connection;
 
         [OneTimeSetUp]
@@ -68,7 +68,7 @@ namespace AwsTestingSolution.Tests.RDS
         [Category("Functional")]
         public void GetImageById()
         {
-            CloudxImageGetModel actualImageMetaData = _cloudxImageApiClient.GetUploadedImageById(_uploadedImageModel.Id);
+            ImageGetModel actualImageMetaData = _cloudxImageApiClient.GetUploadedImageById(_uploadedImageModel.Id);
             actualImageMetaData.ObjectKey.Should().Contain(_fileName);
         }
 
@@ -76,7 +76,7 @@ namespace AwsTestingSolution.Tests.RDS
         [Category("Functional")]
         public void CheckUploadedImageStoredInDatabase()
         {
-            var queryResult = _connection.Query<CloudxImageGetModel>("select Id, object_key as ObjectKey from images").ToList();
+            var queryResult = _connection.Query<ImageGetModel>("select Id, object_key as ObjectKey from images").ToList();
             queryResult.Should().Contain(i => i.Id.Equals(_uploadedImageModel.Id) && i.ObjectKey.Contains(_fileName));
         }
 
@@ -85,7 +85,7 @@ namespace AwsTestingSolution.Tests.RDS
         public void CheckMetadataImageDeletedFromDatabase()
         {
             _cloudxImageApiClient.DeleteFileFromS3Bucket(_uploadedImageModel.Id);
-            var queryResult = _connection.Query<CloudxImageGetModel>("select Id, object_key as ObjectKey from images").ToList();
+            var queryResult = _connection.Query<ImageGetModel>("select Id, object_key as ObjectKey from images").ToList();
             queryResult.Should().NotContain(i => i.Id.Equals(_uploadedImageModel) && i.ObjectKey.Equals(_uploadedImageModel.Id));
         }
     }
