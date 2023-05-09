@@ -1,6 +1,7 @@
 ﻿using AwsTestingSolution.ApiClients.EC2;
 using AwsTestingSolution.ApiClients.RDS;
 using AwsTestingSolution.ApiClients.S3;
+using AwsTestingSolution.ApiClients.SNS;
 
 namespace AwsTestingSolution.Tests
 {
@@ -9,5 +10,6 @@ namespace AwsTestingSolution.Tests
         protected EC2ApiClientWrapper EC2ApiClientWrapper => new EC2ApiClientWrapper();
         protected S3ApiClientWrapper S3ApiClientWrapper => new S3ApiClientWrapper();
         protected RDSApiClientWrapper RdsApiClientWrapper => new RDSApiClientWrapper();
+        protected SNSApiClientWrapper SNSApiClientWrapper => new SNSApiClientWrapper();
     }
 }

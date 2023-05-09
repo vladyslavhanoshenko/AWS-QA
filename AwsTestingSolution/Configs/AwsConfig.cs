@@ -8,21 +8,21 @@ namespace AwsTestingSolution.Configs
     public class AwsConfig
     {
         public const string ProfileName = "default";
-        private static RegionEndpoint _regionEndpoint = RegionEndpoint.USEast1;
+        public static RegionEndpoint RegionEndpoint = RegionEndpoint.USEast1;
 
         public static AmazonEC2Config EC2Config = new AmazonEC2Config
         {
-            RegionEndpoint = _regionEndpoint
+            RegionEndpoint = RegionEndpoint
         };
 
         public static AmazonS3Config S3Config = new AmazonS3Config
         {
-            RegionEndpoint = _regionEndpoint
+            RegionEndpoint = RegionEndpoint
         };
 
         public static AmazonRDSConfig RdsConfig = new AmazonRDSConfig
         {
-            RegionEndpoint = _regionEndpoint
+            RegionEndpoint = RegionEndpoint
         };
     }
 }
