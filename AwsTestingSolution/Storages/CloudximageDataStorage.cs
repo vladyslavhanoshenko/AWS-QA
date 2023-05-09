@@ -11,5 +11,7 @@
         public static string DataBaseName => "cloudximages";
         public static string DataBasePassword => Environment.GetEnvironmentVariable("RdsDBPassword");
         public static uint MySqlPort => 3306;
+
+        public static string SnsQueueUrl => "https://sqs.us-east-1.amazonaws.com/452671696024/cloudximage-QueueSQSQueueE7532512-K1vfQ8rX6lqM";
     }
 }

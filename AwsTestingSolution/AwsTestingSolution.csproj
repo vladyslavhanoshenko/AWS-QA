@@ -14,6 +14,7 @@
 		<PackageReference Include="AWSSDK.RDS" Version="3.7.106" />
 		<PackageReference Include="AWSSDK.S3" Version="3.7.104.8" />
 		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.101.61" />
+		<PackageReference Include="AWSSDK.SQS" Version="3.7.102.1" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="FluentAssertions" Version="6.10.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
