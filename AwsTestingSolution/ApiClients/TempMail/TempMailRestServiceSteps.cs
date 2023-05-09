@@ -19,10 +19,31 @@ namespace AwsTestingSolution.ApiClients.TempMail
             return JsonConvert.DeserializeObject<EmailModel[]>(response);
         }
 
+        public bool IsMessageWithSubjectPresent(string email, string subject)
+        {
+            var actualMessages = GetMailsWithWait(email.ToMd5Hash());
+            return actualMessages.Any(m => m.MailSubject.Equals(subject));
+        }
+
+        public EmailModel WaitForMailWithSubject(string md5Hash, string subject)
+        {
+            EmailModel[] actualEmails = GetMailsWithWait(md5Hash);
+            while(!actualEmails.Any(m => m.MailSubject.Equals(subject)))
+            {
+                actualEmails = GetMailsWithWait(md5Hash);
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
+            return actualEmails.First(i => i.MailSubject.Equals(subject));
+        }
+        
         public EmailModel GetSubscriptionConfirmation(string email)
         {
-            var actualMails = GetMailsWithWait(email.ToMd5Hash());
-            return actualMails.Single(i => i.MailSubject.Equals("AWS Notification - Subscription Confirmation"));
+            return WaitForMailWithSubject(email.ToMd5Hash(), "AWS Notification - Subscription Confirmation");
+        }
+
+        public EmailModel GetNotificationEmail(string email)
+        {
+            return WaitForMailWithSubject(email.ToMd5Hash(), "AWS Notification Message");
         }
 
         public string GetConfirmationUrl(string messageBody)

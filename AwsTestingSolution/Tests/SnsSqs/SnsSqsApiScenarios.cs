@@ -2,13 +2,11 @@
 using AwsTestingSolution.ApiClients.TempMail;
 using FluentAssertions;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace AwsTestingSolution.Tests.SnsSqs
 {
     [TestFixture]
-    public class SnsSqsApiScenarios : AwsTestsBase
+    public class SnsSqsApiScenarios : SnsSqsScenariosBase
     {
         private NotificationApiClient _notificationApiClient = new NotificationApiClient();
         private static TempMailRestServiceSteps TempMailRestServiceSteps = new TempMailRestServiceSteps();
@@ -50,22 +48,6 @@ namespace AwsTestingSolution.Tests.SnsSqs
 
             var actualSubscriptions = _notificationApiClient.GetEmailSubscriptionsToSnsTopic();
             actualSubscriptions.Should().NotContain(s => s.Endpoint.Equals(EmailAddress));
-        }
-
-        private string ConfirmSubscriptionUi(string confirmationUrl)
-        {
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl(confirmationUrl);
-            var subscribtionId = driver.FindElement(By.XPath("//code")).Text;
-            driver.Quit();
-            return subscribtionId;
-        }
-
-        private static string CreateEmailAddress()
-        {
-            var emailWithoutDomain = "cloudx" + new Random().Next(0, 99999999) + "image";
-            string domain = TempMailRestServiceSteps.TempMailRestService.GetDomainsList().First();
-            return emailWithoutDomain + domain;
         }
     }
 }

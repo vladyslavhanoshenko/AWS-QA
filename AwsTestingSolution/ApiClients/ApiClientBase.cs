@@ -64,7 +64,7 @@ namespace AwsTestingSolution.ApiClients
             return stringResult;
         }
 
-        protected void DownloadFileGet(string uri, string filePath)
+        public void DownloadFileGet(string uri, string filePath)
         {
             var request = (HttpWebRequest)WebRequest.Create(new Uri(uri));
             request.Method = "GET";
