@@ -9,6 +9,14 @@ namespace AwsTestingSolution.ApiClients.SQS
         public SQSApiClientWrapper() => GetAwsCredentials();
         private AmazonSQSClient SQSClient => new AmazonSQSClient(awsCredentials, AwsConfig.RegionEndpoint);
 
+        public ListQueuesResponse GetSqsQueues()
+        {
+            var listQueuesRequest = new ListQueuesRequest();
+            var listQueuesResponse = SQSClient.ListQueuesAsync(listQueuesRequest);
+            var listQueuesResult = listQueuesResponse.Result;
+            return listQueuesResult;
+        }
+
         public GetQueueAttributesResponse GetSqsQueueAttributes(string queueUrl)
         {
             var sqsQueueResponse = SQSClient.GetQueueAttributesAsync(new GetQueueAttributesRequest

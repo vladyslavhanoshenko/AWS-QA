@@ -1,11 +1,13 @@
-﻿using AwsTestingSolution.Storages;
+﻿using Amazon.SimpleNotificationService.Model;
+using Amazon.SQS.Model;
+using AwsTestingSolution.Storages;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace AwsTestingSolution.Tests.Serverless
 {
     [TestFixture]
-    public class ServerlessDeploymentBase : AwsTestsBase
+    public class ServerlessDeploymentScenarios : AwsTestsBase
     {
         [Test]
         public void VerifyApplicationDatabase()
@@ -57,5 +59,20 @@ namespace AwsTestingSolution.Tests.Serverless
             var tableTags = DynamoDBApiClientWrapper.GetTableTags(tableDescription.Table.TableArn);
             tableTags.Tags.Should().Contain(t => t.Key.Equals("cloudx") && t.Value.Equals("qa"));
         }
+
+        [Test]
+        public void VerifyApplicationUsesSns() //this scenario partially duplicates logic in VerifyLambda scenario
+        {
+            ListTopicsResponse actualSnsTopics = SNSApiClientWrapper.GetAllTopics();
+            actualSnsTopics.Topics.Should().Contain(t => t.TopicArn.Contains("cloudxserverless-TopicSNSTopic"));
+        }
+
+        [Test]
+        public void VerifyApplicationUsesSqs() 
+        {
+            ListQueuesResponse actualSqsQueus = SQSApiClientWrapper.GetSqsQueues();
+            actualSqsQueus.QueueUrls.Should().Contain(t => t.Contains("cloudxserverless-QueueSQSQueue"));
+        }
     }
 }
+
