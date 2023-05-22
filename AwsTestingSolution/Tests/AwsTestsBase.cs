@@ -1,5 +1,6 @@
 ﻿using AwsTestingSolution.ApiClients.DynamoDB;
 using AwsTestingSolution.ApiClients.EC2;
+using AwsTestingSolution.ApiClients.Lambda;
 using AwsTestingSolution.ApiClients.RDS;
 using AwsTestingSolution.ApiClients.S3;
 using AwsTestingSolution.ApiClients.SNS;
@@ -15,6 +16,6 @@ namespace AwsTestingSolution.Tests
         protected SNSApiClientWrapper SNSApiClientWrapper => new SNSApiClientWrapper();
         protected SQSApiClientWrapper SQSApiClientWrapper => new SQSApiClientWrapper();
         protected DynamoDBApiClientWrapper DynamoDBApiClientWrapper => new DynamoDBApiClientWrapper();
-        
+        protected LambdaApiClientWrapper LambdaApiClientWrapper => new LambdaApiClientWrapper();
     }
 }
