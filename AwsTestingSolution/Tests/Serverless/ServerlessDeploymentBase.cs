@@ -40,5 +40,22 @@ namespace AwsTestingSolution.Tests.Serverless
             var lambdaTags = LambdaApiClientWrapper.GetLambdaTags(handlerLambda.FunctionArn);
             lambdaTags.Tags.Should().Contain(t => t.Key.Equals("cloudx") && t.Value.Equals("qa"));
         }
+
+        [Test]
+        public void VerifyDynamoDbTableRequirements()
+        {
+            var tableDescription = DynamoDBApiClientWrapper.DescribeTable(ServerlessDataStorage.DatabaseTableName);
+            var globalSecondaryIndexesEnabled = tableDescription.Table.GlobalSecondaryIndexes != null && tableDescription.Table.GlobalSecondaryIndexes.Count > 0;
+
+            var provisionedReadCapacityUnits = tableDescription.Table.ProvisionedThroughput.ReadCapacityUnits;
+            var provisionedWriteCapacityUnits = tableDescription.Table.ProvisionedThroughput.WriteCapacityUnits;
+
+            globalSecondaryIndexesEnabled.Should().BeFalse();
+            provisionedReadCapacityUnits.Should().Be(5);
+            provisionedWriteCapacityUnits.Should().Be(1);
+
+            var tableTags = DynamoDBApiClientWrapper.GetTableTags(tableDescription.Table.TableArn);
+            tableTags.Tags.Should().Contain(t => t.Key.Equals("cloudx") && t.Value.Equals("qa"));
+        }
     }
 }

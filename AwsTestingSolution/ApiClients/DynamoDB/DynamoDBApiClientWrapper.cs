@@ -26,5 +26,24 @@ namespace AwsTestingSolution.ApiClients.DynamoDB
             var response = AmazonDynamoDBClient.ScanAsync(request).Result;
             return response;
         }
+
+        public DescribeTableResponse DescribeTable(string tableName)
+        {
+            var describeTableRequest = new DescribeTableRequest
+            {
+                TableName = tableName
+            };
+
+            var describeTableResponse = AmazonDynamoDBClient.DescribeTableAsync(describeTableRequest);
+            DescribeTableResponse tableDescription = describeTableResponse.Result;
+            return tableDescription;
+        }
+
+        public ListTagsOfResourceResponse GetTableTags(string tableArn)
+        {
+            var response = AmazonDynamoDBClient.ListTagsOfResourceAsync(new ListTagsOfResourceRequest { ResourceArn = tableArn});
+            var responseResults = response.Result;
+            return responseResults;
+        }
     }
 }
